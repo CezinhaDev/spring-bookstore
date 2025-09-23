@@ -1,13 +1,19 @@
 package com.bookstore.jpa.models;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +27,10 @@ public class PublisherModel implements Serializable {
 
     @Column(nullable = false, unique = true) // Define a coluna para nao repetir e nao aceitar nulo
     private String name;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Ignora na serialização (GET), mas permite na desserialização (POST/PUT)
+    @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY) // Nome do atributo na classe BookModel que referencia PublisherModel, lazy carrega os livros apenas quando necessário, SE FOR EAGER carrega junto com a editora
+    private Set<BookModel> books = new HashSet<>(); // Conjunto de livros publicados por essa editora
 
     public UUID getId() {
         return id;
@@ -36,6 +46,14 @@ public class PublisherModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<BookModel> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<BookModel> books) {
+        this.books = books;
     }
 
 }

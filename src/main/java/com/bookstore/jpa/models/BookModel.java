@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +23,13 @@ public class BookModel implements Serializable {
 
     @Column(nullable = false, unique = true) // Define a coluna como não nula e única
     private String title;
+
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id") // Nome da coluna que referencia a tabela Publisher, para criar a foreign key
+    private PublisherModel publisher;
+
+
 
     public UUID getId() {
         return id;
@@ -37,5 +46,15 @@ public class BookModel implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public PublisherModel getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(PublisherModel publisher) {
+        this.publisher = publisher;
+    }
+
+    
 
 }
