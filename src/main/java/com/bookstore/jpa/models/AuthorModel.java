@@ -1,33 +1,29 @@
 package com.bookstore.jpa.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-
 @Entity
 @Table(name = "TB_AUTHOR")
 public class AuthorModel implements Serializable {
-    private static final long serialVersionUID = 1L; // Usado para versionar a classe durante a serialização
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id; // uuid é um identificador único universal
+    private UUID id;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Ignora na serialização (GET), mas permite na desserialização (POST/PUT)
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY) // Nome do atributo na classe BookModel que referencia AuthorModel
-    private Set<BookModel> books = new HashSet<>(); // Conjunto de livros do autor
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    private Set<BookModel> books = new HashSet<>();
+
 
     public UUID getId() {
         return id;
@@ -45,9 +41,6 @@ public class AuthorModel implements Serializable {
         this.name = name;
     }
 
-    @Column(nullable = false, unique = true) // Define a coluna como não nula e única
-    private String name; // Nome do autor
-
     public Set<BookModel> getBooks() {
         return books;
     }
@@ -55,7 +48,4 @@ public class AuthorModel implements Serializable {
     public void setBooks(Set<BookModel> books) {
         this.books = books;
     }
-
-    
-
 }

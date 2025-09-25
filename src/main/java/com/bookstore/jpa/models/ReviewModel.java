@@ -1,30 +1,22 @@
 package com.bookstore.jpa.models;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.util.UUID;
 
 @Entity
 @Table(name = "TB_REVIEW")
 public class ReviewModel implements Serializable {
-    private static final long serialVersionUID = 1L; // Version control for serialization
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
 
-    @Column(nullable = false) // Define a coluna como não nula
+    @Column(nullable = false)
     private String comment;
-
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
@@ -32,11 +24,11 @@ public class ReviewModel implements Serializable {
     private BookModel book;
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -55,7 +47,4 @@ public class ReviewModel implements Serializable {
     public void setBook(BookModel book) {
         this.book = book;
     }
-
-    
-
 }
